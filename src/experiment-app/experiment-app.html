@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../list-container/list-container.html">
+
+<dom-module id="experiment-app">
+  <template>
+    <style>
+      :host {
+        display: flex;
+      }
+
+      div {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <list-container id='list' items='{{items}}'>
+
+      <template is='dom-template' item='[[item]]' item-type='a'>
+        <span>[[item.value]]</span>
+      </template>
+
+      <template is='dom-template' item='[[item]]' item-type='b'>
+        <span on-tap='_do'>[[item.value]]</span>
+      </template>
+
+    </list-container>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'experiment-app',
+
+      properties: {
+        items: {
+          type: Array,
+          value: function() {
+            return [{value: 'default'}, {itemType: 'a', value: 'type a'}, {itemType: 'b', value: 'type b'}];
+          }
+        }
+      }
+
+    });
+  </script>
+</dom-module>

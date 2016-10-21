@@ -1,0 +1,7 @@
+{
+  "name": "experiment",
+  "short_name": "experiment",
+  "description": "for trying different things",
+  "start_url": "/",
+  "display": "standalone"
+}

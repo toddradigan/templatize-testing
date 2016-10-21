@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="list-container">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host > * {
+        margin: 4px;
+        padding: 8px;
+        border: 1px solid;
+      }
+    </style>
+
+    <template id='default' is='dom-template' item='[[item]]'>
+      <span on-tap='_do'>[[item.value]]</span>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'list-container',
+
+      behaviors: [
+        Polymer.Templatizer
+      ],
+
+      properties: {
+        items: {
+          type: Array,
+          value: function() { return[]; }
+        },
+        templateStore: {
+          type: Object,
+          value: function() { return {}; }
+        }
+      },
+
+      listeners: {
+        'tap': 'tapItem'
+      },
+
+      ready: function() {
+        for (var i = 0; i < this.children.length; i++) {
+          var template = this.children[i];
+
+          var key = template.attributes
+                    && template.attributes['item-type']
+                    && template.attributes['item-type'].value
+                    || 'default';
+          this.templateStore[key] = template;
+        }
+        if (!this.templateStore.default) {
+          this.templateStore.default = this.$.default;
+        }
+
+        this._stamp();
+      },
+
+      tapItem: function(e) {
+        console.log('list-container.tapItem', e);
+      },
+
+      _stamp: function() {
+        if (this.items && this.items.length > 0 && this.templateStore) {
+          for (var i = 0; i < this.items.length; i++) {
+            var type = this.items[i].itemType || 'default';
+            var template = this.templateStore[type] || this.templateStore.default;
+
+            this.templatize(template);
+
+            var elem = this.stamp({item: this.items[i], index: i});
+            Polymer.dom(this.root).appendChild(elem.root);
+          }
+        }
+      }
+
+    });
+  </script>
+</dom-module>
